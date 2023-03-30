@@ -20,9 +20,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
       typeof error === 'string'
         ? { success: false, url: request.url, statusCode, error }
         : { success: false, url: request.url, statusCode, ...error };
-
-    console.log(request.query);
-
     return response.status(statusCode).json(result);
   }
 }
