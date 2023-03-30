@@ -1,5 +1,9 @@
-import { Logger, ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import {
+  ClassSerializerInterceptor,
+  Logger,
+  ValidationPipe,
+} from '@nestjs/common';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
@@ -10,8 +14,13 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api/v1/bike');
 
-  // Filters, Pipes
+  // Interceptors
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+
+  // Filters
   app.useGlobalFilters(new HttpExceptionFilter());
+
+  // Pipes
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

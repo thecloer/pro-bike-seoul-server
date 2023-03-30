@@ -23,7 +23,7 @@ import { DEFAULT_PORT } from './config/defaultValues';
       }),
     }),
     TypeOrmModule.forRootAsync(typeOrmModuleOptions),
-    // StationsModule,
+    StationsModule,
   ],
 })
 export class AppModule {}
