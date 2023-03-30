@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { StationsModule } from './stations/stations.module';
-import typeOrmModuleOptions from './config/typeorm.config';
+import { typeOrmModuleOptions } from './config/typeorm.config';
 import { DEFAULT_PORT } from './config/defaultValues';
 
 @Module({
