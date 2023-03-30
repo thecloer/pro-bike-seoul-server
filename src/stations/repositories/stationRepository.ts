@@ -7,7 +7,7 @@ import { StationEntity } from '../entities/station.entity';
 export interface StationRepository extends Repository<StationEntity> {
   this: Repository<StationEntity>;
 
-  findNearPoint(
+  findWithinDistance(
     coordinates: CoordinatesDto,
     maxDistance: number,
   ): Promise<StationEntity[]>;
@@ -16,16 +16,22 @@ export interface StationRepository extends Repository<StationEntity> {
 type StationRepositoryCustomMethods = Pick<StationRepository, any>;
 
 const stationRepositoryCustomMethods: StationRepositoryCustomMethods = {
-  findNearPoint(coordinates: CoordinatesDto, maxDistance: number) {
-    // TODO:
-    // return (this as StationRepository)
-    //   .createQueryBuilder('station')
-    //   .select()
-    //   .where(
-    //     'ST_Distance_Sphere(point, ST_MakePoint( :lng , :lat )) <= :maxDistance',
-    //     { lng: coordinates.lng, lat: coordinates.lat, maxDistance },
-    //   )
-    //   .getMany();
+  findWithinDistance(coordinates: CoordinatesDto, distance: number) {
+    return (this as StationRepository)
+      .createQueryBuilder('station')
+      .select()
+      .where(
+        `ST_DWithin(
+	          point::geography,
+	          ST_SetSRID(ST_MakePoint( :lng , :lat ), 4326)::geography,
+            :distance)`,
+        {
+          lng: coordinates.lng,
+          lat: coordinates.lat,
+          distance,
+        },
+      )
+      .getMany();
   },
 };
 

@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CoordinatesDto } from 'src/common/dto/coordinates.dto';
 import { StationEntity } from './entities/station.entity';
@@ -16,7 +20,13 @@ export class StationsService {
   }
 
   searchStationsByCenter(centerCoordinates: CoordinatesDto, radius: number) {
-    // this.stationRepository.findNearPoint(centerCoordinates, radius);
-    return 'This action returns all stations';
+    try {
+      return this.stationRepository.findWithinDistance(
+        centerCoordinates,
+        radius,
+      );
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
   }
 }
