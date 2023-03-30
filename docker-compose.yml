@@ -6,8 +6,10 @@ services:
     container_name: pro-ttareungler-postgis
     restart: 'no'
     environment:
-      - POSTGRES_USER=${PGIS_USER}
+      - POSTGRES_USER=${PGIS_USERNAME}
       - POSTGRES_PASSWORD=${PGIS_PASSWORD}
+      - POSTGRES_DB=${PGIS_NAME}
+
     env_file:
       - ./.env
     ports:
