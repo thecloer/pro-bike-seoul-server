@@ -7,23 +7,33 @@ import { StationEntity } from '../entities/station.entity';
 export interface StationRepository extends Repository<StationEntity> {
   this: Repository<StationEntity>;
 
+  /**
+   * find stations within a distance from a point
+   * @param coordinates lng, lat
+   * @param distance meters
+   * @returns Promise<StationEntity[]>
+   */
   findWithinDistance(
     coordinates: CoordinatesDto,
-    maxDistance: number,
+    distance: number,
   ): Promise<StationEntity[]>;
 }
 
-type StationRepositoryCustomMethods = Pick<StationRepository, any>;
-
+type StationRepositoryCustomMethods = Pick<
+  StationRepository,
+  'findWithinDistance'
+>;
 const stationRepositoryCustomMethods: StationRepositoryCustomMethods = {
-  findWithinDistance(coordinates: CoordinatesDto, distance: number) {
+  // http://postgis.net/workshops/postgis-intro/geography.html
+  // https://postgis.net/docs/manual-3.3/ST_DWithin.html
+  findWithinDistance(coordinates, distance) {
     return (this as StationRepository)
       .createQueryBuilder('station')
       .select()
       .where(
         `ST_DWithin(
-	          point::geography,
-	          ST_SetSRID(ST_MakePoint( :lng , :lat ), 4326)::geography,
+            point::geography,
+            ST_SetSRID(ST_MakePoint( :lng , :lat ), 4326)::geography,
             :distance)`,
         {
           lng: coordinates.lng,
