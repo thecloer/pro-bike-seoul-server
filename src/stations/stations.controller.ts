@@ -8,12 +8,12 @@ import { StationsService } from './stations.service';
 export class StationsController {
   constructor(private readonly stationsService: StationsService) {}
 
-  @Get('all')
+  @Get()
   getAllStations() {
     return this.stationsService.getAllStations();
   }
 
-  @Get()
+  @Get('nearby')
   getStationsByCenter(
     @Query()
     stationsByCenterDto: GetStationsByCenterDto,
