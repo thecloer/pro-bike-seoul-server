@@ -12,7 +12,13 @@ import { DEFAULT_PORT } from './config/defaultValues';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  const crossOriginList =
+    process.env.NODE_ENV === 'production'
+      ? process.env.CROSS_ORIGIN_LIST.split(',').map((origin) => origin.trim())
+      : true;
+
   app.setGlobalPrefix('api/v1/bike');
+  app.enableCors({ origin: crossOriginList });
 
   // Interceptors
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
