@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { GeoPointEntity } from 'src/common/entities/geoPoint.entity';
 import { Column, Entity } from 'typeorm';
 
@@ -11,4 +12,8 @@ export class StationEntity extends GeoPointEntity {
 
   @Column()
   addressName: string;
+
+  @Exclude()
+  @Column({ unique: true })
+  apiIndx: number;
 }
