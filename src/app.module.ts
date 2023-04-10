@@ -20,6 +20,8 @@ import { DEFAULT_PORT } from './config/defaultValues';
         PGIS_HOST: Joi.string().required(),
         PGIS_PORT: Joi.number().required(),
         PGIS_NAME: Joi.string().required(),
+
+        SEOUL_BIKE_API_KEY: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRootAsync(typeOrmModuleOptions),
