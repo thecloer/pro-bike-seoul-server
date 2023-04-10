@@ -1,12 +1,9 @@
 import { GeoPointEntity } from 'src/common/entities/geoPoint.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 
 @Entity('bike_station')
 export class StationEntity extends GeoPointEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({ unique: true })
+  @Column({ unique: true, primary: true })
   stationId: string;
 
   @Column()
