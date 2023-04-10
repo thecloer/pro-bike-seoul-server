@@ -8,17 +8,15 @@ import { StationsService } from './stations.service';
 export class StationsController {
   constructor(private readonly stationsService: StationsService) {}
 
-  @Get()
-  getAllStations() {
-    return this.stationsService.getAllStations();
-  }
-
   @Get('nearby')
   getStationsByCenter(
     @Query()
     stationsByCenterDto: GetStationsByCenterDto,
   ) {
     const { radius, ...centerCoords } = stationsByCenterDto;
-    return this.stationsService.searchStationsByCenter(centerCoords, radius);
+    return this.stationsService.getStationsWithStatusByCenter(
+      centerCoords,
+      radius,
+    );
   }
 }
