@@ -71,14 +71,15 @@ export class StationsService {
         ({ stationId, lat, lng, address, addressName }) => {
           const { stationName, rackTotCnt, parkingBikeTotCnt } = status.find(
             (status) => status.stationId === stationId,
-          );
+          ) ?? { stationName: '', rackTotCnt: 0, parkingBikeTotCnt: 0 };
+
           return {
             lat,
             lng,
             stationId,
             address,
             addressName,
-            stationName: stationName,
+            stationName,
             rackCount: Number(rackTotCnt),
             availableBikeCount: Number(parkingBikeTotCnt),
           };
