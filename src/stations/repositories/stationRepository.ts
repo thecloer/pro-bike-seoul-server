@@ -41,6 +41,12 @@ const stationRepositoryCustomMethods: StationRepositoryCustomMethods = {
           distance,
         },
       )
+      .orderBy(
+        `ST_Distance(
+			      point::geography,
+			      ST_SetSRID(ST_MakePoint( :lng , :lat ), 4326)::geography
+			      )`,
+      )
       .getMany();
   },
 };
