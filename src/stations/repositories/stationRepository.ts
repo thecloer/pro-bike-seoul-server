@@ -12,16 +12,28 @@ export interface StationRepository extends Repository<StationEntity> {
    * @param coordinates lng, lat
    * @param distance meters
    * @returns Promise<StationEntity[]>
+   * @deprecated use findNearest instead
    */
   findWithinDistance(
     coordinates: CoordinatesDto,
     distance: number,
   ): Promise<StationEntity[]>;
+
+  /**
+   * find K-nearest stations from a point
+   * @param coordinates lng, lat
+   * @param count number of stations to find
+   * @returns Promise<StationEntity[]>
+   */
+  findNearest(
+    coordinates: CoordinatesDto,
+    count: number,
+  ): Promise<StationEntity[]>;
 }
 
 type StationRepositoryCustomMethods = Pick<
   StationRepository,
-  'findWithinDistance'
+  'findWithinDistance' | 'findNearest'
 >;
 const stationRepositoryCustomMethods: StationRepositoryCustomMethods = {
   // http://postgis.net/workshops/postgis-intro/geography.html
@@ -47,6 +59,24 @@ const stationRepositoryCustomMethods: StationRepositoryCustomMethods = {
 			      ST_SetSRID(ST_MakePoint( :lng , :lat ), 4326)::geography
 			      )`,
       )
+      .getMany();
+  },
+
+  //https://www.crunchydata.com/blog/a-deep-dive-into-postgis-nearest-neighbor-search
+  findNearest(coordinates, count) {
+    return (this as StationRepository)
+      .createQueryBuilder('station')
+      .select()
+      .addSelect(
+        `"station"."point" <-> ST_SetSRID(ST_MakePoint( :lng , :lat ), 4326)::geography`,
+        'dist',
+      )
+      .setParameters({
+        lng: coordinates.lng,
+        lat: coordinates.lat,
+      })
+      .orderBy('dist')
+      .limit(count)
       .getMany();
   },
 };
