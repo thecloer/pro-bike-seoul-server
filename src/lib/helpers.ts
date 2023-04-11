@@ -1,3 +1,5 @@
+import { Position } from 'src/routes/types/routes.type';
+
 const SEOUL_BIKE_API_MAX_GAP = 1000;
 export const makeSeoulBikeApiIndexes = (
   indexes: number[],
@@ -23,3 +25,5 @@ export const makeSeoulBikeApiIndexes = (
 export const isFullFilled = <T>(
   result: PromiseSettledResult<T>,
 ): result is PromiseFulfilledResult<T> => result.status === 'fulfilled';
+
+export const lngLatToXY = ({ lat, lng }: Position) => ({ x: lng, y: lat });
