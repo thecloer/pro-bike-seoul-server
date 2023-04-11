@@ -23,14 +23,14 @@ export class StationsService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
-  async getStationsWithStatusByCenter(
+  async getStationsWithStatus(
     centerCoordinates: CoordinatesDto,
-    radius: number,
+    count: number,
   ) {
     try {
-      const stationsNearby = await this.stationRepository.findWithinDistance(
+      const stationsNearby = await this.stationRepository.findNearest(
         centerCoordinates,
-        radius,
+        count,
       );
 
       const apiIndexes = stationsNearby.map(({ apiIndx }) => apiIndx);
@@ -89,9 +89,7 @@ export class StationsService {
       return stationsWithStatus;
     } catch (error) {
       console.log(error);
-      throw new InternalServerErrorException(
-        'Error in getStationsWithStatusByCenter',
-      );
+      throw new InternalServerErrorException('Error in getStationsWithStatus');
     }
   }
 }

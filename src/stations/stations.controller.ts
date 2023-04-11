@@ -1,6 +1,6 @@
 import { Controller, Get, Query, UseInterceptors } from '@nestjs/common';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
-import { GetStationsByCenterDto } from './dto/getStationsByCenter-query.dto';
+import { GetStationsWithStatus } from './dto/getStationsWithStatus-query.dto';
 import { StationsService } from './stations.service';
 
 @Controller('stations')
@@ -11,12 +11,9 @@ export class StationsController {
   @Get('nearby')
   getStationsByCenter(
     @Query()
-    stationsByCenterDto: GetStationsByCenterDto,
+    stationsByCenterDto: GetStationsWithStatus,
   ) {
-    const { radius, ...centerCoords } = stationsByCenterDto;
-    return this.stationsService.getStationsWithStatusByCenter(
-      centerCoords,
-      radius,
-    );
+    const { count, ...centerCoords } = stationsByCenterDto;
+    return this.stationsService.getStationsWithStatus(centerCoords, count);
   }
 }
