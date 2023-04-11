@@ -28,7 +28,7 @@ export class StationsService {
     count: number,
   ) {
     try {
-      const stationsNearby = await this.stationRepository.findNearest(
+      const stationsNearby = await this.getNearestStations(
         centerCoordinates,
         count,
       );
@@ -90,6 +90,15 @@ export class StationsService {
     } catch (error) {
       console.log(error);
       throw new InternalServerErrorException('Error in getStationsWithStatus');
+    }
+  }
+
+  getNearestStations(coordinates: CoordinatesDto, count: number) {
+    try {
+      return this.stationRepository.findNearest(coordinates, count);
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException('Error in getNearestStations');
     }
   }
 }
