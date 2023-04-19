@@ -39,6 +39,8 @@ lerna-debug.log*
 
 # docker volumn
 data
+valhalla_data/**
+!valhalla_data/seoul-osm.pbf
 
 # personal
 memo.md
