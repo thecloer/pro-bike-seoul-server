@@ -1,11 +1,9 @@
-import type {
-  KakaoMobilityWaypointsResponse,
-  Position,
-} from 'src/routes/types/routes.type';
+import type { Position } from 'src/routes/types/routes.type';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { lngLatToXY } from 'src/lib/helpers';
+import { KakaoMobilityWaypointsResponse } from './types/kakao-mobility-api.type';
 
 @Injectable()
 export class KakaoMobilityApiService {

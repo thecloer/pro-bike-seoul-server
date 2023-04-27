@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { StationsModule } from './stations/stations.module';
 import { typeOrmModuleOptions } from './config/typeorm.config';
 import { DEFAULT_PORT } from './config/defaultValues';
+import { RoutesModule } from './routes/routes.module';
 
 @Module({
   imports: [
@@ -23,10 +24,13 @@ import { DEFAULT_PORT } from './config/defaultValues';
 
         SEOUL_BIKE_API_KEY: Joi.string().required(),
         KAKAO_REST_API_KEY: Joi.string().required(),
+        GRAPHHOPPER_API_KEY: Joi.string().required(),
+        // VALHALLA_API_URL: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRootAsync(typeOrmModuleOptions),
     StationsModule,
+    RoutesModule,
   ],
 })
 export class AppModule {}
