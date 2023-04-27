@@ -37,9 +37,4 @@ export class RoutesController {
     );
     return result[0];
   }
-
-  @Get('test')
-  test() {
-    return this.routesService.valhallaRoute();
-  }
 }
