@@ -1,4 +1,5 @@
-import { Position } from 'src/routes/types/routes.type';
+import { ValhallaRouteTrip } from 'src/external-api/types/valhalla-api.type';
+import { Route } from 'src/routes/types/routes.type';
 
 const SEOUL_BIKE_API_MAX_GAP = 1000;
 export const makeSeoulBikeApiIndexes = (
@@ -26,4 +27,56 @@ export const isFullFilled = <T>(
   result: PromiseSettledResult<T>,
 ): result is PromiseFulfilledResult<T> => result.status === 'fulfilled';
 
-export const lngLatToXY = ({ lat, lng }: Position) => ({ x: lng, y: lat });
+export const valhallaDataFormatter = (trip: ValhallaRouteTrip): Route => {
+  const points = trip.locations.map(({ lat, lon }) => ({ lat, lng: lon }));
+  const time = trip.summary.time;
+  const distance = trip.summary.length;
+  const maneuver = trip.legs.reduce(
+    ({ shapes, maneuvers }, cur, legNumber) => {
+      const curShape = {
+        encodedPolyline: cur.shape,
+        bounds: {
+          leftBottom: {
+            lat: cur.summary.min_lat,
+            lng: cur.summary.min_lon,
+          },
+          rightTop: {
+            lat: cur.summary.max_lat,
+            lng: cur.summary.max_lon,
+          },
+        },
+      };
+      const curManeuver = cur.maneuvers.map((m) => ({
+        time: m.time,
+        distance: m.length,
+        shapeIndex: {
+          legNumber,
+          begin: m.begin_shape_index,
+          end: m.end_shape_index,
+        },
+        instructions: {
+          instruction: m.instruction,
+          postTransition: m.verbal_post_transition_instruction,
+          preTransition: m.verbal_pre_transition_instruction,
+          transitionAlert: m.verbal_transition_alert_instruction,
+        },
+      }));
+
+      return {
+        shapes: [...shapes, curShape],
+        maneuvers: [...maneuvers, ...curManeuver],
+      };
+    },
+    {
+      shapes: [],
+      maneuvers: [],
+    } as Pick<Route, 'shapes' | 'maneuvers'>,
+  );
+
+  return {
+    points,
+    time,
+    distance,
+    ...maneuver,
+  };
+};

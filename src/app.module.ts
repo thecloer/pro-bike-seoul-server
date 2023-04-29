@@ -23,9 +23,7 @@ import { RoutesModule } from './routes/routes.module';
         PGIS_NAME: Joi.string().required(),
 
         SEOUL_BIKE_API_KEY: Joi.string().required(),
-        KAKAO_REST_API_KEY: Joi.string().required(),
-        GRAPHHOPPER_API_KEY: Joi.string().required(),
-        // VALHALLA_API_URL: Joi.string().required(),
+        VALHALLA_API_URL: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRootAsync(typeOrmModuleOptions),

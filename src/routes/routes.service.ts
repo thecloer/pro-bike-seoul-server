@@ -1,3 +1,5 @@
+import type { StationWithStatus } from 'src/stations/types/stations.type';
+import type { Position } from './types/routes.type';
 import {
   HttpException,
   HttpStatus,
@@ -6,16 +8,13 @@ import {
 } from '@nestjs/common';
 import { StationEntity } from 'src/stations/entities/station.entity';
 import { StationsService } from 'src/stations/stations.service';
-import { StationWithStatus } from 'src/stations/types/stations.type';
-import { Position } from './types/routes.type';
-import { GraphhopperService } from 'src/external-api/graphHopper-api.service';
-// import { ValhallaService } from 'src/external-api/valhalla-api.service';
+import { ValhallaService } from 'src/external-api/valhalla-api.service';
 
 @Injectable()
 export class RoutesService {
   constructor(
     private readonly stationsService: StationsService,
-    private readonly graphhopperService: GraphhopperService, // private readonly valhallaService: ValhallaService,
+    private readonly valhallaService: ValhallaService,
   ) {}
 
   async makeDirections(origin: Position, destination: Position) {
@@ -40,18 +39,17 @@ export class RoutesService {
       if (!destinationStation)
         throw new HttpException('No destination station', HttpStatus.NOT_FOUND);
 
-      const waypoints = [originStation, destinationStation].map((station) => ({
+      const points = [
+        origin,
+        originStation,
+        destinationStation,
+        destination,
+      ].map((station) => ({
         lat: station.lat,
-        lng: station.lng,
+        lon: station.lng,
       }));
 
-      // return await this.valhallaService.getRoute([
-      //   origin,
-      //   ...waypoints,
-      //   destination,
-      // ]);
-
-      return await this.graphhopperService.getRoute(waypoints);
+      return await this.valhallaService.getRoute(points);
     } catch (error) {
       console.log(error);
       throw new InternalServerErrorException('Error in makeDirections');
