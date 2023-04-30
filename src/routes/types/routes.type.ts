@@ -4,9 +4,15 @@ export type Position = {
 };
 
 export type Route = {
-  points: Position[];
-  time: number;
-  distance: number;
+  summary: {
+    points: Position[];
+    bounds: {
+      leftBottom: Position;
+      rightTop: Position;
+    };
+    time: number;
+    distance: number;
+  };
   shapes: {
     encodedPolyline: string;
     bounds: {
@@ -15,7 +21,7 @@ export type Route = {
     };
   }[];
   maneuvers: {
-    time: number;
+    time: number; // seconds
     distance: number;
     shapeIndex: {
       legNumber: number; // which shape in shapes

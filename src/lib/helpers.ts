@@ -31,7 +31,18 @@ export const valhallaDataFormatter = (trip: ValhallaRouteTrip): Route => {
   const points = trip.locations.map(({ lat, lon }) => ({ lat, lng: lon }));
   const time = trip.summary.time;
   const distance = trip.summary.length;
-  const maneuver = trip.legs.reduce(
+  const bounds = {
+    leftBottom: {
+      lat: trip.summary.min_lat,
+      lng: trip.summary.min_lon,
+    },
+    rightTop: {
+      lat: trip.summary.max_lat,
+      lng: trip.summary.max_lon,
+    },
+  };
+
+  const trips = trip.legs.reduce(
     ({ shapes, maneuvers }, cur, legNumber) => {
       const curShape = {
         encodedPolyline: cur.shape,
@@ -74,9 +85,12 @@ export const valhallaDataFormatter = (trip: ValhallaRouteTrip): Route => {
   );
 
   return {
-    points,
-    time,
-    distance,
-    ...maneuver,
+    summary: {
+      points,
+      bounds,
+      time,
+      distance,
+    },
+    ...trips,
   };
 };
