@@ -3,7 +3,7 @@ version: '3.1'
 services:
   db:
     image: postgis/postgis:15-3.3
-    container_name: pro-ttareungler-postgis
+    container_name: pro-bike-seoul-postgis
     restart: 'no'
     environment:
       - POSTGRES_USER=${PGIS_USERNAME}
@@ -16,3 +16,25 @@ services:
       - '5432:5432'
     volumes:
       - ./data:/var/lib/postgresql/data
+
+  valhalla:
+    image: gisops/valhalla:3.3.0
+    container_name: pro-bike-seoul-valhalla
+    ports:
+      - '8002:8002'
+    volumes:
+      - ./valhalla_data:/custom_files
+    environment:
+      # https://download.geofabrik.de/asia/south-korea.html
+      - tile_urls=https://download.geofabrik.de/asia/south-korea-latest.osm.pbf
+      # Get correct bounding box from e.g. https://boundingbox.klokantech.com/
+      - min_x=126 # >= -180
+      - min_y=37 # >= -90
+      - max_x=128 # <= 180
+      - max_y=38 # <= 90
+      - use_tiles_ignore_pbf=True
+      - force_rebuild=False
+      - force_rebuild_elevation=False
+      - build_elevation=True
+      # - build_admins=True
+      # - build_time_zones=True
