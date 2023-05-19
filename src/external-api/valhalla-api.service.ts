@@ -29,10 +29,10 @@ export class ValhallaService {
         costing_options: {
           bicycle: {
             bicycle_type: 'Hybrid', //'Road' | 'Hybrid' | 'Cross' | 'Mountain' - default: 'Hybrid'
-            use_roads: 0.5, // 0(avoid roads, stay on cycleways) ~ 1(more comfortable riding on roads) - default: 0.5
+            use_roads: 0, // 0(avoid roads, stay on cycleways) ~ 1(more comfortable riding on roads) - default: 0.5
             use_hills: 0.5, // 0(avoid hills) ~ 1(use hills) - default: 0.5
-            use_ferry: 0.5, // 0(avoid ferries) ~ 1(favor ferries) - default: 0.5
-            use_living_streets: 0.5, // 0(avoid living streets) ~ 1(no effect on route selection) - default: 0.5
+            use_ferry: 0, // 0(avoid ferries) ~ 1(favor ferries) - default: 0.5
+            use_living_streets: 0, // 0(avoid living streets) ~ 1(no effect on route selection) - default: 0.5
             use_bad_surface: 0.5, // 0(no penalization of roads with different surface types) ~ 1(no bad surface) - default: 0.25
             maneuver_penalty: 5, // penalty for changing maneuver type - default: 5 seconds
           },
