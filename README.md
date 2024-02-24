@@ -2,6 +2,8 @@
 
 `프로따릉러`는 서울시 공공자전거 따릉이의 실시간 대여소 정보와 경로 탐색 기능을 제공하는 서비스입니다.
 
+프로젝트 소개: [[프로따릉러] 따릉이 경로 추천 서비스](https://blog.thecloer.com/116)
+
 Service: [https://probikeseoul.thecloer.com](https://probikeseoul.thecloer.com)
 
 ## Using
